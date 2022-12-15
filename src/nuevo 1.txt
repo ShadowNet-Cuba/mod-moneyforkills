@@ -1,0 +1,59 @@
+/*
+ * Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
+ */
+
+#include "ScriptMgr.h"
+#include "Player.h"
+#include "Config.h"
+#include "Chat.h"
+#include "Group.h"
+
+bool MFKEnable = true;
+bool MFKAnnounceModule = true;
+bool MFKKillingBlowOnly = false;
+bool MFKMoneyForNothing = false;
+bool MFKLowLevelBounty = false;
+uint32 MFKMinPVPLevel = 10;
+uint32 MFKPVPCorpseLootPercent = 5;
+uint32 MFKKillMultiplier = 100;
+uint32 MFKPVPMultiplier = 200;
+uint32 MFKDungeonBossMultiplier = 10;
+uint32 MFKWorldBossMultiplier = 15;
+
+
+// Add player scripts
+class MFKConfig : public WorldScript
+{
+public:
+    MFKConfig() : WorldScript("MFKConfig") { }
+
+    void OnBeforeConfigLoad(bool reload) override
+    {
+        if (!reload) {
+
+    }
+};
+
+class MFKAnnounce : public PlayerScript
+{
+
+public:
+    MFKAnnounce() : PlayerScript("MFKAnnounce") {}
+
+    void OnLogin(Player* player)
+    {
+        // Announce Module
+        if (MFKEnable)
+        {
+            if (MFKAnnounceModule)
+            {
+                ChatHandler(player->GetSession()).SendSysMessage("This server is running the|cff4CFF00 MoneyForKills |rmodule.");
+            }
+        }
+    }
+};
+// Add all scripts in one
+void AddMFKConfigScripts()
+{
+    new MFKConfig();
+}
